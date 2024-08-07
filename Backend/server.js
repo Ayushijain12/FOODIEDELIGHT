@@ -36,18 +36,15 @@ app.post("/login", (req, res) => {
 
     db.query(sql, values, async (err, results) => {
         if (err) {
-            console.error('Database error:', err);
             return res.status(500).json({ error: 'Database error' });
         }
-
         if (results.length === 0) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+            return res.status(200).json({ error: 'Invalid email or password' });
         }
 
         const user = results[0];
 
         try {
-            // Compare the provided password with the hashed password from the database
             const isMatch = await bcrypt.compare(password, user.password_hash);
             if (!isMatch) {
                 return res.status(200).json({ error: 'Invalid email or password' });

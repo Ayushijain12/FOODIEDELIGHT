@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginToEmp } from '../redux/actions';
+import { loginToEmp } from '../redux/authSlice';
 import '../App.css';
 
 const defaultTheme = createTheme();
@@ -23,8 +23,6 @@ export default function SignInSide() {
 
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
-  
-
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,17 +30,14 @@ export default function SignInSide() {
     const handSubmit = async (values) => {
         if (values.email !== "" && values.password !== "") {
             try {
-                const response = await dispatch(loginToEmp(values));
-                console.log(response, 'response');
-                if(!response){
-                    setOpen(true);
-                    setMessage("Invalid email or password")
-                }
+                const result = await dispatch(loginToEmp(values));
+                const response = result.payload;
+
                 if (response.message === "Login successful") {
                     alert(response.message);
                     localStorage.setItem('user', JSON.stringify(response.data));
                     navigate('/dashboard');
-                }else{
+                } else {
                     setOpen(true);
                     setMessage(response.error);
                 }
@@ -135,13 +130,11 @@ export default function SignInSide() {
 
                 </Grid>
             </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={() => {setOpen(!open)}}
-                        key={{vertical: "bottom"} + {horizontal : "right"}}
-                        anchorOrigin={{ vertical: "bottom",horizontal : "right" }}
-
->
+            <Snackbar open={open} autoHideDuration={6000} onClose={() => { setOpen(!open) }}
+                key={{ vertical: "bottom" } + { horizontal: "right" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
                 <Alert
-                    onClose={() => {setOpen(!open)}}
+                    onClose={() => { setOpen(!open) }}
                     severity="error"
                     variant="filled"
                     sx={{ width: '100%' }}
