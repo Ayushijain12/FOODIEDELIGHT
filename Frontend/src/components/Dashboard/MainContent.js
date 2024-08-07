@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Grid, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import ListTable from '../ListTable'; 
+import AddressForm from '../AddResturants/AddressForm'; 
 import Toolbar from '@mui/material/Toolbar';
 
 
@@ -26,7 +26,7 @@ const MainContent = ({ openAddForm, handleOnChange }) => {
                     <Typography variant="h4" component="div">
                         {openAddForm ? "Add Restaurant" : "Restaurants Lists"}
                     </Typography>
-                    {openAddForm && <ListTable />}
+                    {openAddForm && <AddressForm />}
                 </Grid>
                 {!openAddForm && (
                     <Grid item xs={6} container justifyContent="flex-end">
