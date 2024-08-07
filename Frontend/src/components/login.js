@@ -5,11 +5,12 @@ import * as Yup from 'yup';
 import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginToEmp } from '../redux/actions'; 
+import { loginToEmp } from '../redux/actions';
+import '../App.css';
 
 const defaultTheme = createTheme();
 const validationSchema = Yup.object({
@@ -20,6 +21,11 @@ const validationSchema = Yup.object({
 
 export default function SignInSide() {
 
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+  
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,13 +34,21 @@ export default function SignInSide() {
             try {
                 const response = await dispatch(loginToEmp(values));
                 console.log(response, 'response');
+                if(!response){
+                    setOpen(true);
+                    setMessage("Invalid email or password")
+                }
                 if (response.message === "Login successful") {
                     alert(response.message);
                     localStorage.setItem('user', JSON.stringify(response.data));
-                    navigate('/dashboard'); 
+                    navigate('/dashboard');
+                }else{
+                    setOpen(true);
+                    setMessage(response.error);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                setOpen(true);
+                setMessage("Something Went Wrong!!")
             }
         }
     }
@@ -67,11 +81,10 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
+                        <Avatar alt="Remy Sharp" src="/test.jpg" />
+
                         <Typography component="h1" variant="h5">
-                            Login Employee
+                            Food App Administration
                         </Typography>
                         <Formik
                             initialValues={{
@@ -104,16 +117,17 @@ export default function SignInSide() {
                                         helperText={touched.password ? errors.password : ''}
                                         error={touched.password && Boolean(errors.password)}
                                     />
-                                    <Button type="submit" variant="contained" color="primary" fullWidth>
+                                    <Button sx={{
+                                        backgroundColor: '#8B0000',
+                                        color: 'white',
+                                        '&:hover': {
+                                            backgroundColor: 'darkblue',
+                                        },
+                                        margin: '10px 0'
+                                    }} type="submit" variant="contained" fullWidth>
                                         Login
                                     </Button>
-                                    <Grid container style={{ margin: '10px' }}>
-                                        <Grid item>
-                                            <Link onClick={() => navigate('/register')} variant="body2">
-                                                {"Don't have an account? Sign Up"}
-                                            </Link>
-                                        </Grid>
-                                    </Grid>
+
                                 </Form>
                             )}
                         </Formik>
@@ -121,6 +135,20 @@ export default function SignInSide() {
 
                 </Grid>
             </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={() => {setOpen(!open)}}
+                        key={{vertical: "bottom"} + {horizontal : "right"}}
+                        anchorOrigin={{ vertical: "bottom",horizontal : "right" }}
+
+>
+                <Alert
+                    onClose={() => {setOpen(!open)}}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {message}!
+                </Alert>
+            </Snackbar>
         </ThemeProvider>
     );
 }

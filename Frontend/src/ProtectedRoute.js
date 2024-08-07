@@ -7,6 +7,13 @@ const isAuthenticated = () => {
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
+  const userAuthenticated = isAuthenticated();
+
+
+  console.log("userAuthenticated", userAuthenticated);
+  if (userAuthenticated && location.pathname === '/login') {
+    return <Navigate to="/dashboard" replace />;
+  }
   
   return isAuthenticated() ? (
     children

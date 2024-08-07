@@ -33,40 +33,4 @@ export const loginToEmp = (values) => {
   };
 };
 
-export const RegisterToEMP = (values) => {
-  return async (dispatch) => {
-    dispatch({ type: REGISTER_WITH_EMPLOYEE });
-    try {
-      const response = await axios.post('http://localhost:8081/signup',values ); 
-      dispatch({
-        type: REGISTER_WITH_EMPLOYEE_SUCCESS,
-        payload: response.data,
-      });
-      return response.data; 
-    } catch (error) {
-      dispatch({
-        type: REGISTER_WITH_EMPLOYEE_FAILURE,
-        payload: error.message,
-      });
-    }
-  };
-}
 
-  export const SuperAdminLogin = (values) => {
-    return async (dispatch) => {
-      dispatch({ type: SUPER_WITH_EMPLOYEE });
-      try {
-        const response = await axios.post('http://localhost:8081/super/login',values ); 
-        dispatch({
-          type: SUPER_WITH_EMPLOYEE_SUCCESS,
-          payload: response.data,
-        });
-        return response.data; 
-      } catch (error) {
-        dispatch({
-          type: SUPER_WITH_EMPLOYEE_FAILURE,
-          payload: error.message,
-        });
-      }
-    };
-}
