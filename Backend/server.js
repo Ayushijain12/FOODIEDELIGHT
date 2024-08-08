@@ -50,7 +50,7 @@ app.post("/login", (req, res) => {
                 return res.status(200).json({ error: 'Invalid email or password' });
             }
 
-            return res.status(200).json({ message: 'Login successful', data: user });
+            return res.status(200).json({ message: 'Login successful', data: user, status : 200 });
         } catch (compareErr) {
             return res.status(500).json({ error: 'Server error' });
         }
@@ -58,6 +58,36 @@ app.post("/login", (req, res) => {
 })
 
 
+app.post('/restaurants', (req, res) => {
+    const { name, description, phone, email, website, opening_hours, address1, city, state, postal_code } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const sql = 'INSERT INTO restaurants (name, description, phone, email, website, opening_hours, street_address, city, state, postal_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [name, description, phone, email, website, opening_hours, address1, city, state, postal_code];
+    
+    db.query(sql, values, (err, result) => {
+        console.log(err);
+        if (err) {
+            return res.status(500).json(err);
+        }
+        res.status(201).json({ message: 'Restaurant created', id: result.insertId, status : 200 });
+    });
+});
+
+
+app.get('/restaurants/lists', (req, res) => {
+    const sql = 'SELECT * FROM restaurants';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.status(200).json(results);
+    });
+});
 
 app.listen(8081, () => {
     console.log("listening");

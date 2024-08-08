@@ -7,7 +7,7 @@ import Listview from '../ListComponet/Listview';
 import Toolbar from '@mui/material/Toolbar';
 
 
-const MainContent = ({ handlenavigate }) => {
+const MainContent = ({handlenavigate}) => {
     return (
         <Box
             component="main"
@@ -23,19 +23,13 @@ const MainContent = ({ handlenavigate }) => {
         >
             <Toolbar />
             <Grid container spacing={6} style={{ padding: '10px' }}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <Typography variant="h4" component="div">
-                        {"Restaurants Lists"}
+                        Add Restaurant
                     </Typography>
                 </Grid>
-                <Grid item xs={6} container justifyContent="flex-end">
-                    <Button variant="contained" color="primary" onClick={handlenavigate}>
-                        <AddIcon style={{ margin: '5px' }} />
-                        Add restaurant
-                    </Button>
-                </Grid>
-                <Grid item xs={12} style={{ padding: '10px 10px 0px 50px' }}>
-                    <Listview />
+                <Grid item xs={12} style={{ padding: '20px 70px' }}>
+                    <AddressForm handlenavigate={handlenavigate} />
                 </Grid>
             </Grid>
         </Box>

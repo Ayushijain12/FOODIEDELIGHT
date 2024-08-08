@@ -32,14 +32,14 @@ const AppBarComponent = ({ open, toggleDrawer, username }) => {
     const navigate = useNavigate();
 
     return (
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={false}>
             <Toolbar sx={{ pr: '24px' }}>
                 <IconButton
                     edge="start"
                     color="inherit"
                     aria-label="open drawer"
                     onClick={toggleDrawer}
-                    sx={{ marginRight: '36px', ...(open && { display: 'none' }) }}
+                    sx={{ marginRight: '36px', ...(false && { display: 'none' }) }}
                 >
                     <MenuIcon />
                 </IconButton>

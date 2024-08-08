@@ -15,11 +15,13 @@ export const loginToEmp = createAsyncThunk(
   }
 );
 
+
 // Define the slice
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    emailSubjects: [],
+    logindata: [],
+    addResData: [],
     loading: false,
     error: null,
   },
@@ -32,12 +34,13 @@ const authSlice = createSlice({
       })
       .addCase(loginToEmp.fulfilled, (state, action) => {
         state.loading = false;
-        state.emailSubjects = action.payload;
+        state.logindata = action.payload;
       })
       .addCase(loginToEmp.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
   },
 });
 

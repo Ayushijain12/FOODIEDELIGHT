@@ -21,7 +21,7 @@ const MyApp = () => {
     };
 
     const handlenavigate = () => {
-        navigate('/add/restaurant');
+        navigate('/dashboard');
     }
 
     return (
@@ -34,7 +34,7 @@ const MyApp = () => {
                     username={UserArray.username}
                 />
                 <DrawerComponent open={open} toggleDrawer={toggleDrawer} />
-                <MainContent handlenavigate={handlenavigate} />
+                <MainContent handlenavigate={handlenavigate}  />
             </Box>
         </ThemeProvider>
     );

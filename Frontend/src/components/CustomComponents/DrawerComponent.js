@@ -38,7 +38,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const DrawerComponent = ({ open, toggleDrawer }) => {
     return (
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={false}>
             <Toolbar
                 sx={{
                     display: 'flex',

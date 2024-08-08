@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TextField, Button, Grid, Typography, Box, Paper } from '@mui/material';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -6,11 +6,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginToEmp } from '../redux/authSlice';
 import '../App.css';
+import SnackbarAlert from '../components/CustomComponents/SnackbarAlert';
 
 const defaultTheme = createTheme();
 const validationSchema = Yup.object({
@@ -28,23 +27,21 @@ export default function SignInSide() {
     const navigate = useNavigate();
 
     const handSubmit = async (values) => {
-        if (values.email !== "" && values.password !== "") {
-            try {
-                const result = await dispatch(loginToEmp(values));
-                const response = result.payload;
+        try {
+            const result = await dispatch(loginToEmp(values));
+            const response = result.payload;
 
-                if (response.message === "Login successful") {
-                    alert(response.message);
-                    localStorage.setItem('user', JSON.stringify(response.data));
-                    navigate('/dashboard');
-                } else {
-                    setOpen(true);
-                    setMessage(response.error);
-                }
-            } catch (error) {
+            if (response.status === 200) {
+                alert(response.message);
+                localStorage.setItem('user', JSON.stringify(response.data));
+                navigate('/dashboard');
+            } else {
                 setOpen(true);
-                setMessage("Something Went Wrong!!")
+                setMessage(response.error);
             }
+        } catch (error) {
+            setOpen(true);
+            setMessage("Something Went Wrong!!")
         }
     }
 
@@ -130,18 +127,7 @@ export default function SignInSide() {
 
                 </Grid>
             </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={() => { setOpen(!open) }}
-                key={{ vertical: "bottom" } + { horizontal: "right" }}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
-                <Alert
-                    onClose={() => { setOpen(!open) }}
-                    severity="error"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {message}!
-                </Alert>
-            </Snackbar>
+            <SnackbarAlert open={open} onClose={() => setOpen(false)} message={message} />
         </ThemeProvider>
     );
 }
