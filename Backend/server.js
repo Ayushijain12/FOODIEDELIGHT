@@ -69,7 +69,6 @@ app.post('/restaurants', (req, res) => {
     const values = [name, description, phone, email, website, opening_hours, address1, city, state, postal_code];
     
     db.query(sql, values, (err, result) => {
-        console.log(err);
         if (err) {
             return res.status(500).json(err);
         }
@@ -86,6 +85,73 @@ app.get('/restaurants/lists', (req, res) => {
             return res.status(500).json({ error: 'Database error' });
         }
         res.status(200).json(results);
+    });
+});
+
+app.get('/restaurants-id/:id', (req, res) => {
+    const { id } = req.params;
+
+    // Ensure the ID is a valid number
+    if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
+    const sql = 'SELECT * FROM restaurants WHERE id = ?';
+    const values = [id];
+
+    db.query(sql, values, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+        res.status(200).json(results[0]);
+    });
+});
+
+
+app.put('/edit-restaurants/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, description, phone, email, website, opening_hours, address1, city, state, postal_code } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const sql = `
+        UPDATE restaurants
+        SET name = ?, description = ?, phone = ?, email = ?, website = ?, opening_hours = ?, street_address = ?, city = ?, state = ?, postal_code = ?
+        WHERE id = ?
+    `;
+    const values = [name, description, phone, email, website, opening_hours, address1, city, state, postal_code, id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+        res.status(200).json({ message: 'Restaurant updated successfully', status : 200 });
+    });
+});
+
+
+app.delete('/delete-restaurants/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM restaurants WHERE id = ?';
+    const values = [id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+        res.status(200).json({ message: 'Restaurant deleted successfully' });
     });
 });
 
