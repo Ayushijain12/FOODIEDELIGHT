@@ -24,6 +24,16 @@ File path :  Frontend/restaurant.sql
 Adding images of Admin User Login and the Crud Opreation Screen.
 Login Cred : admin@example.com
 Password : yourStaticPassword
+
+Task	Start Time	End Time	Time Spent
+Configure Redux store	9:00 AM	11:00 AM	2 hours
+Create Redux actions and reducers	11:00 AM	1:00 PM	2 hours
+Connect Redux to components	2:00 PM	4:00 PM	2 hours
+Integrate Formik into login form	4:00 PM	5:30 PM	1.5 hours
+Write Yup validation schema	5:30 PM	6:30 PM	1 hour
+Integrate Material-UI components	7:00 PM	9:00 PM	2 hours
+
+
 ![image](https://github.com/user-attachments/assets/be533724-fdc3-4777-8d39-b173cbfd4ccb)
 
 Login Screen 
