@@ -19,4 +19,4 @@ npm run start
 Project Port : 3000
 
 For Database connectivity you need to use SQL, you find the commit SQL file, and import that file in your local.
-File path :  Frontend/project.sql
+File path :  Frontend/restaurant.sql
