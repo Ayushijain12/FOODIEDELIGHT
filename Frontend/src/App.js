@@ -33,6 +33,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+            <Route
+            path="/edit/restaurant/:id"
+            element={
+              <ProtectedRoute>
+                <AddResturant />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </Provider>

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useDispatch } from 'react-redux';
-import { RegisterRestaurant } from '../../redux/restaurantSlice';
+import { RegisterRestaurant, GetRestaurantsbyID } from '../../redux/restaurantSlice';
 import SnackbarAlert from '../CustomComponents/SnackbarAlert';
+import { useParams } from 'react-router-dom';
 
 // Validation Schema with Yup
 const validationSchema = Yup.object({
@@ -27,9 +28,49 @@ const validationSchema = Yup.object({
 });
 
 const AddressForm = ({ handlenavigate }) => {
+  const { id } = useParams();
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
+  const [initialValues, setInitialValues] = useState({
+    name: '',
+    description: '',
+    address1: '',
+    city: '',
+    state: '',
+    zip: '',
+    phone: '',
+    email: '',
+    website: '',
+  });
   const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(GetRestaurantsbyID(id));
+        const response = result.payload;
+
+        if (response) {
+          setInitialValues({
+            name: response.name || '',
+            description: response.description || '',
+            address1: response.street_address || '',
+            city: response.city || '',
+            state: response.state || '',
+            zip: response.postal_code || '',
+            phone: response.phone || '',
+            email: response.email || '',
+            website: response.website || '',
+            id: response.id
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [dispatch, id]);
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
@@ -53,17 +94,8 @@ const AddressForm = ({ handlenavigate }) => {
   return (
     <>
       <Formik
-        initialValues={{
-          name: '',
-          description: '',
-          address1: '',
-          city: '',
-          state: '',
-          zip: '',
-          phone: '',
-          email: '',
-          website: '',
-        }}
+        enableReinitialize
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -184,7 +216,7 @@ const AddressForm = ({ handlenavigate }) => {
                       label={<><span style={{ color: 'red' }}>*</span> Zip / Postal Code</>}
                       placeholder="12345"
                       fullWidth
-                      type="text" // Changed to text to match the regex validation
+                      type="text"
                       variant="outlined"
                       error={touched.zip && !!errors.zip}
                       helperText={<ErrorMessage name="zip" />}

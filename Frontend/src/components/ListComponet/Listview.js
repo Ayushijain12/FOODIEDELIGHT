@@ -3,26 +3,31 @@ import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Divid
 import PaginationComponent from './PaginationComponent';
 import { useDispatch } from 'react-redux';
 import { GetRestaurants } from '../../redux/restaurantSlice';
+import { useNavigate } from 'react-router-dom';
+import {  DeleteRestaurantsbyID } from '../../redux/restaurantSlice';
+
+
 
 const ListWithPagination = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(1);
   const [listData, setListData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDeleted, setIsDeleted] = useState(false);
+
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const itemsPerPage = 3;
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handleEdit = (item) => {
-    console.log("Edit:", item);
-    // Implement edit logic here
+    navigate(`/edit/restaurant/${item.id}`);
   };
 
-  const handleDelete = (item) => {
-    console.log("Delete:", item);
-    // Implement delete logic here
+  const handleDelete = async (item) => {
+    await dispatch(DeleteRestaurantsbyID(item.id));
+    setIsDeleted(true)
   };
 
   useEffect(() => {
@@ -32,15 +37,13 @@ const ListWithPagination = () => {
         const response = result.payload;
         setListData(response);
         setFilteredData(response);
-        setTotalItems(response.length);
       } catch (err) {
         console.log(err);
       }
     };
 
-    // Call the async function
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, isDeleted]);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);

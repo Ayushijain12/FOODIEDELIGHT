@@ -1,13 +1,14 @@
 // MainContent.js
 import React from 'react';
-import { Box, Grid, Typography, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Grid, Typography } from '@mui/material';
 import AddressForm from '../AddResturants/AddressForm';
-import Listview from '../ListComponet/Listview';
+import { useParams } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 
 
 const MainContent = ({handlenavigate}) => {
+    const { id } = useParams();
+
     return (
         <Box
             component="main"
@@ -25,7 +26,7 @@ const MainContent = ({handlenavigate}) => {
             <Grid container spacing={6} style={{ padding: '10px' }}>
                 <Grid item xs={12}>
                     <Typography variant="h4" component="div">
-                        Add Restaurant
+                        {id ? 'Edit Restaurant' : 'Add Restaurant' }
                     </Typography>
                 </Grid>
                 <Grid item xs={12} style={{ padding: '20px 70px' }}>
